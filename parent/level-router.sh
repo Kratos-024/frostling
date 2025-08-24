@@ -1,7 +1,6 @@
 #!/bin/bash
 LEVEL_NUM=${USER#level}
 
-# Check if container exists and is running
 if ! sudo docker ps --format "{{.Names}}" | grep -q "^level${LEVEL_NUM}-container$"; then
     echo "Starting level${LEVEL_NUM} container..."
     sudo docker run -d --name level${LEVEL_NUM}-container child-level${LEVEL_NUM} 2>/dev/null || {
@@ -11,6 +10,5 @@ if ! sudo docker ps --format "{{.Names}}" | grep -q "^level${LEVEL_NUM}-containe
     sleep 2
 fi
 
-# Connect to the container
 echo "Connecting to level${LEVEL_NUM} container..."
 exec sudo docker exec -it level${LEVEL_NUM}-container /bin/bash
