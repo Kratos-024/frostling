@@ -1,0 +1,6 @@
+Instructions:
+1. Explore files in this directory
+2. Find password.txt for next level
+3. Use password to SSH to next level
+
+Command: ssh level1@server-ip -p 2222

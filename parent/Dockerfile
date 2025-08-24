@@ -1,6 +1,6 @@
 FROM alpine:latest
 
-RUN apk add --no-cache openssh bash curl && \
+RUN apk add --no-cache openssh bash curl sudo shadow && \
     curl -fsSL https://download.docker.com/linux/static/stable/x86_64/docker-20.10.21.tgz | \
     tar -xzC /usr/local/bin --strip-components=1 docker/docker
 
@@ -11,6 +11,11 @@ RUN ssh-keygen -A && \
 RUN for i in $(seq 0 20); do \
         adduser -D -s /bin/bash "level$i" && \
         echo "level$i:level$i" | chpasswd; \
+    done
+
+RUN echo '%wheel ALL=(ALL) NOPASSWD: /usr/local/bin/docker' >> /etc/sudoers && \
+    for i in $(seq 0 20); do \
+        adduser "level$i" wheel; \
     done
 
 COPY level-router.sh /usr/local/bin/
