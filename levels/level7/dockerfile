@@ -1,0 +1,19 @@
+FROM alpine:latest
+
+RUN apk add --no-cache bash
+
+RUN adduser -D -s /bin/bash level7 && \
+    echo "level7:D0fZZ(f%vM]ZYdm" | chpasswd
+
+RUN mkdir -p /home/level7/database
+COPY users.txt /home/level7/database/
+
+RUN chown -R level7:D0fZZ(f%vM]ZYdm /home/level7
+
+RUN find /home -type d -exec chmod 555 {} \; \
+    && find /home -type f -exec chmod 444 {} \;
+
+USER level7
+WORKDIR /home/level7
+
+CMD ["/bin/bash", "-c", "tail -f /dev/null"]

@@ -8,11 +8,18 @@ RUN ssh-keygen -A && \
     sed -i 's/#PasswordAuthentication yes/PasswordAuthentication yes/' /etc/ssh/sshd_config && \
     sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin no/' /etc/ssh/sshd_config
 
+# Copy the password file
+COPY pass.txt /tmp/pass.txt
+
+# Create users with passwords from pass.txt file
 RUN for i in $(seq 0 20); do \
         adduser -D -s /bin/bash "level$i" && \
-        echo "level$i:level$i" | chpasswd; \
+        password=$(sed -n "$((i+1))p" /tmp/pass.txt) && \
+        echo "level$i:$password" | chpasswd; \
     done
 
+# Clean up password file
+RUN rm /tmp/pass.txt
 RUN echo '%wheel ALL=(ALL) NOPASSWD: /usr/local/bin/docker' >> /etc/sudoers && \
     for i in $(seq 0 20); do \
         adduser "level$i" wheel; \

@@ -1,15 +1,20 @@
 import random
 import string
 
-# Function to generate a random alphanumeric string
-def random_string(length=10):
-    chars = string.ascii_letters + string.digits
-    return ''.join(random.choice(chars) for _ in range(length))
+def random_word(length=8):
+    # Generates a random word of given length (letters and digits, can adjust)
+    return ''.join(random.choices(string.ascii_letters + string.digits, k=length))
 
-# Open the file in write mode
-with open("pass.txt", "w") as file:
-    for _ in range(1000):
-        line = f"level3-password:{random_string()}\n"
-        file.write(line)
+num_words = 1000
+words = [random_word() for _ in range(num_words)]
 
-print("pass.txt created with 1000 lines!")
+with open("password.txt", "w") as f:
+    # Each word twice
+    for w in words:
+        f.write((w + ' ') * 2 + '\n')
+    # Each word three times
+    for w in words:
+        f.write((w + ' ') * 3 + '\n')
+    # Each word four times
+    for w in words:
+        f.write((w + ' ') * 4 + '\n')

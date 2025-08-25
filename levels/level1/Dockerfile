@@ -3,12 +3,12 @@ FROM alpine:latest
 RUN apk add --no-cache bash
 
 RUN adduser -D -s /bin/bash level1 && \
-    echo "level1:level1" | chpasswd
+    echo "level1:6l8i{8m(e0M2KNa$To" | chpasswd
 
 RUN mkdir -p /home/level1/onichan
 COPY password.txt /home/level1/onichan/
 
-RUN chown -R level1:level1 /home/level1
+RUN chown -R level1:6l8i{8m(e0M2KNa$To /home/level1
 
 
 RUN find /home -type d -exec chmod 555 {} \; \

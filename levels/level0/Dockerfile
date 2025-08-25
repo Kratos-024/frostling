@@ -3,7 +3,7 @@ FROM alpine:latest
 RUN apk add --no-cache bash
 
 RUN adduser -D -s /bin/bash level0 && \
-    echo "level0:level0" | chpasswd
+    echo "level0:mGE$GX{#umwI%C[mohV(" | chpasswd
 
 COPY welcome.txt instructions.txt password.txt /home/level0/
 

@@ -4,14 +4,14 @@ RUN apk add --no-cache bash
 
 # Add user
 RUN adduser -D -s /bin/bash level2 && \
-    echo "level2:level2" | chpasswd
+    echo "level2:>bx4U8$R6$vdA}Wq<!uk!" | chpasswd
 
 # Create directories and copy files
 RUN mkdir -p /home/level2/noPasswordGoAway
 COPY password.txt /home/level2/noPasswordGoAway/
 
 # Change ownership
-RUN chown -R level2:level2 /home/level2
+RUN chown -R level2:>bx4U8$R6$vdA}Wq<!uk! /home/level2
 
 # Set permissions:
 # All directories in /home: read+execute (no write)
