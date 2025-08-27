@@ -1,0 +1,25 @@
+FROM alpine:latest
+
+# Install only what the user actually needs (bash)
+RUN apk add --no-cache bash
+
+# --- Setup for the user ---
+RUN adduser -D -s /bin/bash level12 && \
+    echo "level13:FvY2xYp9monYNxsmbKMozV5" | chpasswd
+
+# Set the working directory for the COPY command
+WORKDIR /home/level13
+
+# Copy the pre-compiled 'get_password' file from your local machine
+# into the container's current directory (/home/level13).
+# The --chown flag sets the owner and group at the same time.
+COPY --chown=level13:level13 get_password .
+
+# Set the intentionally incorrect permissions so the user must fix them.
+# The file is now owned by the user but is not executable.
+RUN chmod 644 get_password
+
+# Switch to the user for the interactive session
+USER level13
+
+CMD ["/bin/bash", "-c", "tail -f /dev/null"]

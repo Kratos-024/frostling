@@ -1,0 +1,19 @@
+FROM alpine:latest
+
+RUN apk add --no-cache bash
+
+RUN adduser -D -s /bin/bash level11 && \
+    echo "level11:dFl2rga6Ej0KowqvZd05" | chpasswd
+
+RUN mkdir -p /home/level11/messages
+COPY encrypted_message.txt /home/level11/messages/
+
+RUN chown -R level11:level11 /home/level11
+
+RUN find /home -type d -exec chmod 555 {} \; \
+    && find /home -type f -exec chmod 444 {} \;
+
+USER level11
+WORKDIR /home/level11
+
+CMD ["/bin/bash", "-c", "tail -f /dev/null"]

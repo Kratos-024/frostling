@@ -1,0 +1,25 @@
+# --- Level 10: File Forensics with diff ---
+FROM alpine:latest
+
+# Install bash and diffutils (for the diff command)
+RUN apk add --no-cache bash diffutils
+
+# Create a non-root user for this level
+RUN adduser -D -s /bin/bash level10 && \
+    echo "level10:1A838d3lyUHUicrZNZOfs" | chpasswd
+
+# Create a directory for the evidence and copy the log files
+RUN mkdir -p /home/level10/evidence
+COPY server_log_template.txt /home/level10/evidence/
+COPY server_log_corrupted.txt /home/level10/evidence/
+
+# Set ownership and secure permissions
+RUN chown -R level10:level10 /home/level10
+RUN find /home -type d -exec chmod 555 {} \; \
+    && find /home -type f -exec chmod 444 {} \;
+
+# Switch to the user
+USER level10
+WORKDIR /home/level10
+
+CMD ["/bin/bash", "-c", "tail -f /dev/null"]

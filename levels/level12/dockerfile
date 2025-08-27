@@ -1,0 +1,23 @@
+FROM alpine:latest
+
+# Install tools for decompression (gzip, bzip2, tar) and bash
+RUN apk add --no-cache bash gzip bzip2 tar
+
+# Create a non-root user for the level
+RUN adduser -D -s /bin/bash level12 && \
+    echo "level12:bVTtoT252P67FMSo3Ru" | chpasswd
+
+# Create a directory and copy the multi-compressed file
+RUN mkdir -p /home/level12/artifacts
+COPY final_archive /home/level12/artifacts/
+
+# Set ownership and secure permissions
+RUN chown -R level12:level12 /home/level12
+RUN find /home -type d -exec chmod 555 {} \; \
+    && find /home -type f -exec chmod 444 {} \;
+
+# Switch to the user
+USER level12
+WORKDIR /home/level12
+
+CMD ["/bin/bash", "-c", "tail -f /dev/null"]

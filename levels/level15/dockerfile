@@ -1,0 +1,36 @@
+FROM alpine:latest
+
+RUN apk add --no-cache bash sudo
+
+# --- Setup for the user and password ---
+RUN adduser -D -s /bin/bash level15 && \
+    echo "level15:AtBsNLlVEwSs" | chpasswd
+
+# --- Grant sudo privileges for chown ---
+# Give the user passwordless sudo access ONLY for the chown command
+RUN echo "level15 ALL=(ALL) NOPASSWD: /bin/chown" >> /etc/sudoers
+
+# --- Create the challenge file ---
+WORKDIR /home/level15
+
+# Create a file owned by root that only root can read
+RUN echo "VR51lPJKJNgQv5b" > secret_data.txt && \
+    chown root:root secret_data.txt && \
+    chmod 600 secret_data.txt
+
+# --- Set final ownership and permissions ---
+# This chown command is correct: it sets the owner to 'level15' and the group to 'level15'
+RUN chown -R level15:level15 /home/level15
+
+# This find command is not strictly necessary after the chown above,
+# but it's good practice for ensuring permissions are locked down.
+RUN find /home/level15 -type d -exec chmod 755 {} \; \
+    && find /home/level15 -type f -exec chmod 644 {} \; \
+    && chown root:root /home/level15/secret_data.txt \
+    && chmod 600 /home/level15/secret_data.txt
+
+# --- Switch to the user ---
+USER level15
+WORKDIR /home/level15
+
+CMD ["/bin/bash", "-c", "tail -f /dev/null"]

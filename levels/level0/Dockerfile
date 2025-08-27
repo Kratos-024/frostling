@@ -6,7 +6,6 @@ RUN adduser -D -s /bin/bash level0 && \
     echo "level0:level0" | chpasswd
 
 COPY welcome.txt instructions.txt password.txt /home/level0/
-
 RUN chown -R level0:level0 /home/level0
 
 RUN chmod 700 /home \

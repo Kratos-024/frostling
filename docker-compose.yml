@@ -1,0 +1,27 @@
+services:
+  level0:
+    build:
+      context: .
+      dockerfile: levels/level0/Dockerfile
+    image: child-level0
+    # no container run needed for levels here, parent manages that
+
+  level1:
+    build:
+      context: .
+      dockerfile: levels/level1/Dockerfile
+    image: child-level1
+    # add more level services similarly if needed
+
+  parent:
+    build:
+      context: parent
+      dockerfile: Dockerfile
+    image: frostling-mother
+    container_name: ssh-docker-server-2
+    ports:
+      - "2222:22"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    privileged: true
+    restart: unless-stopped

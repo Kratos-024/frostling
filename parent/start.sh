@@ -1,9 +1,18 @@
 #!/bin/bash
 
 echo "Starting SSH daemon..."
-/usr/sbin/sshd &
-
+/usr/sbin/sshd  &
 sleep 2
+
+echo "=== USER PASSWORDS ==="
+echo "level0: level0"
+i=1
+while read -r pass; do
+    echo "level$i: $pass"
+    i=$((i+1))
+done < /tmp/pass.txt
+echo "======================"
+echo
 
 echo "=== Docker Socket Debug ==="
 if [ -S /var/run/docker.sock ]; then
@@ -17,7 +26,7 @@ if [ -S /var/run/docker.sock ]; then
         groupmod -g $DOCKER_GID docker 2>/dev/null || echo "Could not change docker group GID"
     fi
 
-    for i in $(seq 0 20); do
+    for i in $(seq 0 2); do
         adduser level$i docker 2>/dev/null || echo "Could not add level$i to docker group"
     done
 
@@ -32,7 +41,7 @@ if docker info >/dev/null 2>&1; then
     echo "✓ Docker daemon accessible as root"
 
     echo "Starting level containers..."
-    for i in $(seq 0 20); do
+    for i in $(seq 0 2); do
         echo "Starting level${i} container..."
         if docker run -d --name level${i}-container child-level${i} 2>/dev/null; then
             echo "✓ level${i} container started"
@@ -44,3 +53,5 @@ if docker info >/dev/null 2>&1; then
 else
     echo "✗ Docker daemon not accessible"
 fi
+
+tail -f /dev/null
