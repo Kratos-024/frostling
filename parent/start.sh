@@ -26,7 +26,7 @@ if [ -S /var/run/docker.sock ]; then
         groupmod -g $DOCKER_GID docker 2>/dev/null || echo "Could not change docker group GID"
     fi
 
-    for i in $(seq 0 2); do
+    for i in $(seq 0 16); do
         adduser level$i docker 2>/dev/null || echo "Could not add level$i to docker group"
     done
 
@@ -41,7 +41,7 @@ if docker info >/dev/null 2>&1; then
     echo "✓ Docker daemon accessible as root"
 
     echo "Starting level containers..."
-    for i in $(seq 0 2); do
+    for i in $(seq 0 16); do
         echo "Starting level${i} container..."
         if docker run -d --name level${i}-container child-level${i} 2>/dev/null; then
             echo "✓ level${i} container started"

@@ -4,7 +4,7 @@ FROM alpine:latest
 RUN apk add --no-cache bash
 
 # --- Setup for the user ---
-RUN adduser -D -s /bin/bash level12 && \
+RUN adduser -D -s /bin/bash level13 && \
     echo "level13:FvY2xYp9monYNxsmbKMozV5" | chpasswd
 
 # Set the working directory for the COPY command

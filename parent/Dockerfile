@@ -43,6 +43,7 @@ RUN echo '%wheel ALL=(ALL) NOPASSWD: /usr/local/bin/docker' >> /etc/sudoers && \
 # Replace shells with router
 COPY level-router.sh /usr/local/bin/
 COPY start.sh /start.sh
+
 RUN chmod +x /usr/local/bin/level-router.sh /start.sh && \
     for i in $(seq 0 21); do \
         sed -i "s|level$i:/bin/bash|level$i:/usr/local/bin/level-router.sh|" /etc/passwd; \

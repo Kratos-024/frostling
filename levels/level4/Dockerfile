@@ -10,7 +10,7 @@ RUN adduser -D -s /bin/bash level4 && \
 COPY level4_home /home/level4/level4_home
 
 # Copy any extra files if needed
-COPY password.txt /home/level4/level4_home/folder1_2/folder2_2/folder3_2/folder4_2/
+COPY password.txt /home/level4/level4_home/folder5_1/folder4_3/folder3_3/folder2_2/folder1_3
 
 # Fix ownership
 RUN chown -R level4:level4 /home/level4
