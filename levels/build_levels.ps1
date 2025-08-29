@@ -8,7 +8,7 @@ foreach ($dir in $dirs) {
     $dockerfilePath = Join-Path $dir.FullName "Dockerfile"
     
     if (Test-Path $dockerfilePath) {
-        $imageName = "child-$($dir.Name)"
+        $imageName = "child-$($dir.Name)-image"
         Write-Host "Building Docker image: $imageName from $dockerfilePath"
         docker build -t $imageName $dir.FullName
     } else {

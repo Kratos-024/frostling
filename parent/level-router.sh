@@ -1,14 +1,23 @@
 #!/bin/bash
 LEVEL_NUM=${USER#level}
+SERVICE_NAME="level${LEVEL_NUM}"
+# Define names for the network and containers to keep them unique per session
+SESSION_ID=$(head /dev/urandom | tr -dc A-Za-z0-9 | head -c 8)
+USER_CONTAINER_NAME="${SERVICE_NAME}_${SESSION_ID}"
 
-if ! sudo docker ps --format "{{.Names}}" | grep -q "^level${LEVEL_NUM}-container$"; then
-    echo "Starting level${LEVEL_NUM} container..."
-    sudo docker run -d --name level${LEVEL_NUM}-container child-level${LEVEL_NUM} 2>/dev/null || {
-        echo "Failed to start container. Trying to start existing container..."
-        sudo docker start level${LEVEL_NUM}-container 2>/dev/null
-    }
-    sleep 2
-fi
+# Function to clean up the environment on exit
+cleanup() {
+    echo -e "\nShutting down the environment..."
+    # Stop and remove both containers and the network
+    sudo docker stop ${USER_CONTAINER_NAME} >/dev/null 2>&1
+    sudo docker rm -f ${USER_CONTAINER_NAME}  >/dev/null 2>&1
+}
 
-echo "Connecting to level${LEVEL_NUM} container..."
-exec sudo docker exec -it level${LEVEL_NUM}-container /bin/bash
+# Trap the script's exit signal to run the cleanup function automatically
+trap cleanup EXIT
+
+echo "Running your environment..."
+sudo docker run -it --rm --name ${USER_CONTAINER_NAME} child-level${LEVEL_NUM}-image /bin/bash
+
+echo "Exiting from level${LEVEL_NUM}"
+# exec sudo docker exec -it ${USER_CONTAINER_NAME} /bin/bash
