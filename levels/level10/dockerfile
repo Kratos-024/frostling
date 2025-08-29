@@ -6,7 +6,7 @@ RUN apk add --no-cache bash diffutils
 
 # Create a non-root user for this level
 RUN adduser -D -s /bin/bash level10 && \
-    echo "level10:1A838d3lyUHUicrZNZOfs" | chpasswd
+    echo "level10:b1n4ry_s34rch_m4st3r" | chpasswd
 
 # Create a directory for the evidence and copy the log files
 RUN mkdir -p /home/level10/evidence
