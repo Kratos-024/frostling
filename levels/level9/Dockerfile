@@ -6,7 +6,7 @@ RUN adduser -D -s /bin/bash level9 && \
     echo "level9:gJEM0aYf5GHFR" | chpasswd
 
 RUN mkdir -p /home/level9/data
-COPY data.bin /home/level9/data/
+COPY firmware.bin /home/level9/data/
 
 RUN chown -R level9:level9 /home/level9
 RUN find /home -type d -exec chmod 555 {} \; \

@@ -3,16 +3,19 @@ FROM alpine:latest
 RUN apk add --no-cache bash tar
 
 RUN adduser -D -s /bin/bash level14 && \
-    echo "level14:yourpassword" | chpasswd
+    echo "level14:WfjrA4M9sXDBvZnwls" | chpasswd
 
 WORKDIR /home/level14
 
-COPY diagnostic_kit .
+COPY diagnostic_kit.tar .
 
 RUN chown -R level14:level14 /home/level14
 
+# Lock down everything
 RUN find /home -type d -exec chmod 555 {} \; \
-    && find /home -type f -exec chmod 444 {} \;
+    && find /home -type f -exec chmod 444 {} \; \
+    # Re-open write perms only for /home/level14
+    && chmod 755 /home/level14
 
 USER level14
 WORKDIR /home/level14

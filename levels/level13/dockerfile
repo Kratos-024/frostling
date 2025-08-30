@@ -7,17 +7,18 @@ RUN apk add --no-cache bash
 RUN adduser -D -s /bin/bash level13 && \
     echo "level13:FvY2xYp9monYNxsmbKMozV5" | chpasswd
 
-# Set the working directory for the COPY command
+# Set the working directory for the level13 user
 WORKDIR /home/level13
 
-# Copy the pre-compiled 'get_password' file from your local machine
-# into the container's current directory (/home/level13).
-# The --chown flag sets the owner and group at the same time.
-COPY --chown=level13:level13 get_password .
+# Create the get_password script with the hidden flag
+RUN echo '#!/bin/bash\necho "WfjrA4M9sXDBvZnw"' > get_password && \
+    chown level13:level13 get_password && \
+    chmod 000 get_password
 
-# Set the intentionally incorrect permissions so the user must fix them.
-# The file is now owned by the user but is not executable.
-RUN chmod 644 get_password
+# ^ chmod 400 → read-only for owner.
+# This prevents execution at first.
+# Player must run: chmod u+x get_password
+# Then execute: ./get_password → flag
 
 # Switch to the user for the interactive session
 USER level13

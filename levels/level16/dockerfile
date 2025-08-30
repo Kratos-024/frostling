@@ -1,44 +1,26 @@
+# This Dockerfile builds the 'client-container' where the user starts
 FROM alpine:latest
 
-# Install OpenSSH server (for internal connections), bash, and tar
+# Install tools for the challenge: tar for extraction, ssh for connecting
 RUN apk add --no-cache openssh bash tar
 
-# --- Setup for User 'level16' (the user starts here) ---
+# --- Setup for User 'level16' ---
 RUN adduser -D -s /bin/bash level16 && \
-    echo "level16:FvY2xYp9monYNxsmbKMozV5" | chpasswd
+    echo "level16:VR51lPJKJNgQv5b" | chpasswd
 
-# --- Setup for User 'target' (the user needs to become this user) ---
-RUN adduser -D -s /bin/bash target
+# --- Create the Challenge File ---
+# This part is tricky. We need the id_rsa file from the server.
+# We will create a temporary key here and package it.
+# This ensures the client Dockerfile can build independently.
+RUN mkdir -p /tmp/temptarget/.ssh
+RUN ssh-keygen -t rsa -b 2048 -f /tmp/temptarget/.ssh/id_rsa -N ""
+RUN tar -cf /home/level16/secret_package.tar -C /tmp/temptarget/.ssh id_rsa
+RUN chown level16:level16 /home/level16/secret_package.tar
+RUN rm -rf /tmp/temptarget
 
-# Generate the SSH key pair that the 'target' user will accept
-# This is all happening inside the container's file system
-RUN mkdir -p /home/target/.ssh && \
-    ssh-keygen -t rsa -b 2048 -f /home/target/.ssh/id_rsa -N "" && \
-    cat /home/target/.ssh/id_rsa.pub > /home/target/.ssh/authorized_keys
+# --- Switch to the user for the interactive session ---
+USER level16
+WORKDIR /home/level16
 
-# Set the required permissions for the target's SSH directory
-RUN chmod 700 /home/target/.ssh && \
-    chmod 600 /home/target/.ssh/authorized_keys && \
-    chown -R target:target /home/target/.ssh
-
-# --- Create the Challenge for 'level16' ---
-# Package the PRIVATE key into a tar file in the level16's home directory
-RUN tar -cf /home/level16/secret_package.tar -C /home/target/.ssh id_rsa && \
-    chown level16:level16 /home/level16/secret_package.tar
-
-# Place the final flag in the 'target' user's home directory
-RUN echo "dN6464qHSTCeUsdE" > /home/target/password.txt && \
-    chown target:target /home/target/password.txt
-
-# --- Configure and Run the Internal SSH Server ---
-# Allow logins but not as root
-RUN echo "PermitRootLogin no" >> /etc/ssh/sshd_config && \
-    echo "PasswordAuthentication yes" >> /etc/ssh/sshd_config
-# Generate the server's unique keys
-RUN ssh-keygen -A
-
-# Expose port 22 internally. No external mapping needed.
-EXPOSE 22
-
-# Start the SSH server in the foreground so the container stays alive
-CMD ["/usr/sbin/sshd", "-D"]
+# --- Keep the container running for the user ---
+CMD ["/bin/bash", "-c", "tail -f /dev/null"]

@@ -14,18 +14,18 @@ RUN adduser -D -s /bin/bash level0 && \
     echo "level0:level0" | chpasswd
 
 # Create all other users with their specific passwords
-RUN adduser -D -s /bin/bash level1 && echo "level1:mGEGXumwICmohV" | chpasswd && \
+RUN adduser -D -s /bin/bash level1 && echo "level1:wELc0m3t0Fr0st" | chpasswd && \
     adduser -D -s /bin/bash level2 && echo "level2:6l8i8me0M2KNaTo" | chpasswd && \
     adduser -D -s /bin/bash level3 && echo "level3:bx4U8R6vdAWquk" | chpasswd && \
     adduser -D -s /bin/bash level4 && echo "level4:aIZ0qLVAV05SuyDV52L" | chpasswd && \
-    adduser -D -s /bin/bash level5 && echo "level5:isVd2Nwipm1UGpa76" | chpasswd && \
+    adduser -D -s /bin/bash level5 && echo "level5:isVd2Nwipm1UGpa76cuz" | chpasswd && \
     adduser -D -s /bin/bash level6 && echo "level6:nAJXOSOB7qRPqpky4V" | chpasswd && \
     adduser -D -s /bin/bash level7 && echo "level7:5lAUBEtWroOKUAlgQ" | chpasswd && \
     adduser -D -s /bin/bash level8 && echo "level8:D0fZZfMZYdm" | chpasswd && \
     adduser -D -s /bin/bash level9 && echo "level9:gJEM0aYf5GHFR" | chpasswd && \
-    adduser -D -s /bin/bash level10 && echo "level10:1A838d3lyUHUicrZNZOfs" | chpasswd && \
-    adduser -D -s /bin/bash level11 && echo "level11:dFl2rga6Ej0KowqvZd05" | chpasswd && \
-    adduser -D -s /bin/bash level12 && echo "level12:bVTtoT252P67FMSo3Ru" | chpasswd && \
+    adduser -D -s /bin/bash level10 && echo "level10:zXcvbNmqWeRtYui" | chpasswd && \
+    adduser -D -s /bin/bash level11 && echo "level11:aSdfgHjKlQwErTy" | chpasswd && \
+    adduser -D -s /bin/bash level12 && echo "level12:tYuioPqWeRzXcvB" | chpasswd && \
     adduser -D -s /bin/bash level13 && echo "level13:FvY2xYp9monYNxsmbKMozV5" | chpasswd && \
     adduser -D -s /bin/bash level14 && echo "level14:WfjrA4M9sXDBvZnw" | chpasswd && \
     adduser -D -s /bin/bash level15 && echo "level15:AtBsNLlVEwSs" | chpasswd && \

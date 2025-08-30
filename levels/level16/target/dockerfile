@@ -1,0 +1,34 @@
+# This Dockerfile builds the 'server-container' (the target)
+FROM alpine:latest
+
+# Install only the OpenSSH server and bash
+RUN apk add --no-cache openssh bash
+
+# --- Setup for User 'target' ---
+# Create the user with a non-standard home directory
+RUN adduser -D -s /bin/bash -h /var/hidden_target target
+
+# --- Setup SSH Authentication for 'target' ---
+# Generate a new key pair for the server. The public key is used for authorization.
+# The private key (id_rsa) is what the user on the client will need.
+# NOTE: For this to work, the user's private key must match this public key.
+# This is why the client Dockerfile generates an identical (but separate) key.
+RUN mkdir -p /var/hidden_target/.ssh
+RUN ssh-keygen -t rsa -b 2048 -f /var/hidden_target/.ssh/id_rsa -N ""
+RUN cat /var/hidden_target/.ssh/id_rsa.pub > /var/hidden_target/.ssh/authorized_keys
+RUN chmod 700 /var/hidden_target/.ssh
+RUN chmod 600 /var/hidden_target/.ssh/authorized_keys
+RUN chown -R target:target /var/hidden_target
+
+# --- Place the Flag ---
+RUN echo "dN6464qHSTCeUsdE" > /var/hidden_target/password.txt
+RUN chown target:target /var/hidden_target/password.txt
+
+# --- Configure and Run the SSH Server ---
+RUN echo "PermitRootLogin no" >> /etc/ssh/sshd_config
+RUN echo "PasswordAuthentication no" >> /etc/ssh/sshd_config # Disallow password login
+RUN echo "ChallengeResponseAuthentication no" >> /etc/ssh/sshd_config
+RUN ssh-keygen -A
+EXPOSE 22
+
+CMD ["/usr/sbin/sshd", "-D"]
