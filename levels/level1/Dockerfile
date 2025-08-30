@@ -3,7 +3,7 @@ FROM alpine:latest
 RUN apk add --no-cache bash
 
 RUN adduser -D -s /bin/bash level1 && \
-    echo "level1:mGEGXumwICmohV" | chpasswd
+    echo "level1:wELc0m3t0Fr0st" | chpasswd
 
 RUN mkdir -p /home/level1/onichan
 COPY password.txt /home/level1/onichan/

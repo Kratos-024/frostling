@@ -3,7 +3,7 @@ FROM alpine:latest
 RUN apk add --no-cache bash
 
 RUN adduser -D -s /bin/bash level11 && \
-    echo "level11:dFl2rga6Ej0KowqvZd05" | chpasswd
+    echo "level11:aSdfgHjKlQwErTy" | chpasswd
 
 RUN mkdir -p /home/level11/messages
 COPY encrypted_message.txt /home/level11/messages/

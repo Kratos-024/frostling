@@ -3,7 +3,7 @@ FROM alpine:latest
 RUN apk add --no-cache bash
 
 RUN adduser -D -s /bin/bash level7 && \
-    echo "level7:D0fZZfMZYdm" | chpasswd
+    echo "level7:5lAUBEtWroOKUAlgQ" | chpasswd
 
 RUN mkdir -p /home/level7/database
 COPY users.txt /home/level7/database/

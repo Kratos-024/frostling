@@ -3,12 +3,12 @@ FROM alpine:latest
 RUN apk add --no-cache bash
 
 RUN adduser -D -s /bin/bash level6 && \
-    echo "level6:5(lAUBEt>WroOKUAlgQ" | chpasswd
+    echo "level6:nAJXOSOB7qRPqpky4V" | chpasswd
 
 RUN mkdir -p /home/level6/analysis
 COPY data1.txt data2.txt data3.txt /home/level6/analysis/
 
-RUN chown -R level6:5(lAUBEt>WroOKUAlgQ /home/level6
+RUN chown -R level6:level6 /home/level6
 
 RUN find /home -type d -exec chmod 555 {} \; \
     && find /home -type f -exec chmod 444 {} \;

@@ -3,7 +3,7 @@ FROM alpine:latest
 RUN apk add --no-cache bash tar
 
 RUN adduser -D -s /bin/bash level14 && \
-    echo "level14:WfjrA4M9sXDBvZnwls" | chpasswd
+    echo "level14:WfjrA4M9sXDBvZnw" | chpasswd
 
 WORKDIR /home/level14
 
