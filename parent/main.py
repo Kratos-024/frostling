@@ -1,39 +1,50 @@
 import os
-import tarfile
-import stat
+import random
+import string
 
-# --- Configuration ---
-# The password for the level, which the script will print
-PASSWORD = "AtBsNLlVEwSs"
+def generate_random_word(length=5):
+    """Generate a random lowercase word of given length."""
+    return ''.join(random.choices(string.ascii_lowercase, k=length))
 
-# --- Create the directory structure ---
-# This makes the path diagnostic_kit/bin/
-os.makedirs("diagnostic_kit/bin", exist_ok=True)
+def generate_random_password(length=12):
+    """Generate a random alphanumeric gibberish password."""
+    chars = string.ascii_letters + string.digits
+    return ''.join(random.choices(chars, k=length))
 
-# --- Create the non-executable script ---
-script_path = "diagnostic_kit/bin/run_diagnostic"
-with open(script_path, "w") as f:
-    # Use a shebang to indicate it's a bash script
-    # The echo command prints the password to standard output
-    f.write(f"#!/bin/bash\necho '{PASSWORD}'\n")
+def create_ctf_files(output_dir="documents", num_files=10, min_words=50, max_words=300, special_password="D0fZZfMZYdm"):
+    """
+    Create text files for wc CTF challenge:
+    - Every file contains a line with "password:<something>".
+    - Exactly one file (random) has 100–110 words and contains the real password.
+    """
+    os.makedirs(output_dir, exist_ok=True)
 
-# --- Set its permissions to be NON-executable ---
-# This sets the permissions to 644 (-rw-r--r--)
-# The user can read it, but cannot execute it.
-os.chmod(script_path, stat.S_IRUSR | stat.S_IWUSR | stat.S_IRGRP | stat.S_IROTH)
-print(f"Created script at '{script_path}' with non-executable permissions.")
+    # Pick which file will contain the real password
+    password_file_index = random.randint(1, num_files)
+    
+    for i in range(1, num_files + 1):
+        if i == password_file_index:
+            # Force word count between 100–110
+            word_count = random.randint(100, 110)
+            words = [generate_random_word(random.randint(3, 8)) for _ in range(word_count - 1)]
+            words.insert(random.randint(0, len(words)), f"password:{special_password}")
+        else:
+            # Make sure it's NOT between 100–110
+            while True:
+                word_count = random.randint(min_words, max_words)
+                if not (100 <= word_count <= 110):
+                    break
+            words = [generate_random_word(random.randint(3, 8)) for _ in range(word_count - 1)]
+            words.insert(random.randint(0, len(words)), f"password:{generate_random_password()}")
+        
+        filename = os.path.join(output_dir, f"file{i}.txt")
+        with open(filename, "w") as f:
+            f.write(" ".join(words))
+        
+        if i == password_file_index:
+            print(f"🔑 Created {filename} with {word_count} words (REAL PASSWORD FILE)")
+        else:
+            print(f"✅ Created {filename} with {word_count} words")
 
-# --- Create the final tarball ---
-# This packages the 'diagnostic_kit' directory and everything inside it
-with tarfile.open("diagnostic_kit.tar", "w") as tar:
-    tar.add("diagnostic_kit")
-
-print("Successfully created 'diagnostic_kit.tar'")
-
-# --- Optional: Clean up the temporary directory ---
-# Uncomment the lines below if you want to automatically remove the
-# 'diagnostic_kit' directory after creating the .tar file.
-# import shutil
-# shutil.rmtree('diagnostic_kit')
-# print("Cleaned up temporary 'diagnostic_kit' directory.")
-
+# Example usage
+create_ctf_files()

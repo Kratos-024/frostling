@@ -497,7 +497,7 @@
 [ERROR] Connection timed out to service 351
 [INFO] File accessed: /var/data/file909.dat
 [ERROR] Connection timed out to service 411
-[AUTH] Password changed to: n3xtL3v3lP4ssw0rd!
+[AUTH] Password changed to: aSdfgHjKlQwErTy
 [WARN] High CPU usage detected on core 921
 [ERROR] Connection timed out to service 302
 [ERROR] Connection timed out to service 703
@@ -764,7 +764,7 @@
 [DEBUG] Cache flushed for session 292
 [WARN] High CPU usage detected on core 391
 [WARN] High CPU usage detected on core 902
-[ERROR] Password = dFl2rga6Ej0KowqvZd05
+[ERROR] Password = aSdfgHjKlQwErTy
 [DEBUG] Cache flushed for session 747
 [WARN] High CPU usage detected on core 198
 [DEBUG] Cache flushed for session 578

@@ -1,19 +1,23 @@
 FROM alpine:latest
 
+# Install bash
 RUN apk add --no-cache bash
 
-RUN adduser -D -s /bin/bash level7 && \
-    echo "level7:5lAUBEtWroOKUAlgQ" | chpasswd
+# Create user and set password
+RUN adduser -D -s /bin/bash level9 && \
+    echo "level9:5lAUBEtWroOKUAlgQ" | chpasswd
 
-RUN mkdir -p /home/level7/database
-COPY users.txt /home/level7/database/
+# Create directory for documents
+RUN mkdir -p /home/level9/documents
+COPY documents/ /home/level9/documents/
 
-RUN chown -R level7:level7 /home/level7
-
+# Set ownership and secure permissions
+RUN chown -R level9:level9 /home/level9
 RUN find /home -type d -exec chmod 555 {} \; \
     && find /home -type f -exec chmod 444 {} \;
 
-USER level7
-WORKDIR /home/level7
+# Switch to non-root user
+USER level9
+WORKDIR /home/level9
 
 CMD ["/bin/bash", "-c", "tail -f /dev/null"]
